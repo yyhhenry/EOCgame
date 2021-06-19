@@ -14,10 +14,67 @@ let cirmodImageSrc='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAH+CAYAAA
 let choosePage;
 let PlayingPage;
 let Cat;
-
+let Barrier;
+let Point;
+let AutoView;
 
 let tk=0;
-
+AutoView=function(){
+	let thisAutoView=this;
+	let width;
+	let height;
+	let p=false;
+	thisAutoView.init=function(_width,_height){
+		width=_width;
+		height=_height;
+		return thisAutoView;
+	}
+	thisAutoView.view=function(canvas,ctx){
+		let cw=canvas.width;
+		let ch=canvas.height;
+		ctx.setTransform(1,0,0,1,0,0);
+		if(width>height&&cw<ch||width<height&&cw>ch){
+			ctx.translate(cw,0);
+			ctx.rotate(Math.PI/2);
+			cw=canvas.height;
+			ch=canvas.width;
+		}
+		if(cw*height>ch*width){
+			//实际屏幕较宽，让ch->height.
+			let k=ch/height;
+			ctx.translate((cw-width*k)/2,0);
+			ctx.scale(k,k);
+		}else{
+			let k=cw/width;
+			ctx.translate(0,(ch-height*k)/2);
+			ctx.scale(k,k);
+		}
+	}
+	thisAutoView.translate=function(canvas,point){
+		let cw=canvas.width;
+		let ch=canvas.height;
+		if(width>height&&cw<ch||width<height&&cw>ch){
+			point=new Point().init(point.y,cw-point.x);
+			cw=canvas.height;
+			ch=canvas.width;
+		}
+		if(cw*height>ch*width){
+			//实际屏幕较宽，让ch->height.
+			let k=ch/height;
+			point=new Point().init((point.x-(cw-width*k)/2)/k,(point.y)/k);
+		}else{
+			let k=cw/width;
+			point=new Point().init((point.x)/k,(point.y-(ch-height*k)/2)/k);
+		}
+		return point;
+	}
+	thisAutoView.getWidth=function(){
+		return width;
+	}
+	thisAutoView.getHeight=function(){
+		return height;
+	}
+}
 function getArc(x,y){
 	let dd=Math.sqrt(x*x+y*y);
 	if(dd<1)dd=1;
@@ -26,7 +83,61 @@ function getArc(x,y){
 	//y轴向下的，方向变量顺时针
 	return arc;
 }
-
+Point=function(){
+	let thisPoint=this;
+	thisPoint.init=function(_x,_y){
+		thisPoint.x=_x;
+		thisPoint.y=_y;
+		return thisPoint;
+	}
+	thisPoint.clone=function(){
+		return new Point().init(thisPoint.x,thisPoint.y);
+	}
+	thisPoint.disTo=function(_p){
+		let dx=thisPoint.x-_p.x;
+		let dy=thisPoint.y-_p.y;
+		return Math.sqrt(dx*dx+dy*dy);
+	}
+	thisPoint.midTo=function(_p){
+		let dx=thisPoint.x+_p.x;
+		let dy=thisPoint.y+_p.y;
+		return new Point().init(dx/2,dy/2);
+	}
+}
+Barrier=function(){
+	let thisBarrier=this;
+	let canvas;
+	let life;
+	let p1;
+	let p2;
+	let autoView;
+	thisBarrier.clear=function(){
+		life=false;
+	}
+	thisBarrier.init=function(_p1,_p2,_autoView){
+		life=true;
+		p1=_p1.clone();
+		p2=_p2.clone();
+		autoView=_autoView;
+		return thisBarrier;
+	}
+	thisBarrier.draw=function(canvas,mouse){
+		if(!life)return;
+		let ctx=canvas.getContext('2d');
+		autoView.view(canvas,ctx);
+		ctx.beginPath();
+		ctx.moveTo(p1.x,p1.y);
+		ctx.strokeStyle='rgb(100,60,180)';
+		ctx.lineTo(p2.x,p2.y);
+		ctx.closePath();
+		ctx.lineWidth=20;
+		ctx.stroke();
+	}
+	thisBarrier.hit=function(_cat){
+		if(!life)return;
+		_cat.behitByBarrier(p1.clone(),p2.clone());
+	}
+}
 Cat=function(){
 	let thisCat=this;
 	let pos;
@@ -38,10 +149,17 @@ Cat=function(){
 	let imageCommon;
 	let imageBlkmod;
 	let imageCirmod;
-	let lastArcTime;
 	let lastChgTime;
 	let arcSpd;
-	thisCat.init=function(_x,_y,_arc,_imageCommon,_imageBlkmod,_imageCirmod){
+	let autoView;
+	let life;
+	thisCat.clear=function(){
+		pos=null;
+		spd=null;
+		life=false;
+	}
+	thisCat.init=function(_x,_y,_arc,_arcSpd,_imageCommon,_imageBlkmod,_imageCirmod,_autoView){
+		life=true;
 		pos=[{x:_x,y:_y}];
 		spd=[{x:0,y:0}];
 		arc=_arc;
@@ -51,11 +169,12 @@ Cat=function(){
 		imageBlkmod=_imageBlkmod;
 		imageCirmod=_imageCirmod;
 		lastTime=new Date().getTime();
-		lastArcTime=new Date().getTime()-12000*Math.random();
-		arcSpd=1;
+		arcSpd=_arcSpd;
+		autoView=_autoView;
 		return thisCat;
 	}
 	thisCat.refresh=function(width,height){
+		if(!life)return;
 		let thisTime=new Date().getTime();
 		let delta=(thisTime-lastTime)/1000;
 		for(let i=0;i<spd.length;i++){
@@ -86,10 +205,6 @@ Cat=function(){
 			pos[i]={x:pos[i].x+spd[i].x*delta,y:pos[i].y+spd[i].y*delta};
 		}
 		if(pos.length==1){
-			if(thisTime>lastArcTime+12000){
-				lastArcTime=thisTime;
-				arcSpd=-arcSpd;
-			}
 			arc+=arcSpd*delta;
 		}
 		if(sc){
@@ -132,9 +247,11 @@ Cat=function(){
 		lastTime=thisTime;
 	}
 	thisCat.draw=function(canvas,mouse){
+		if(!life)return;
 		let ctx=canvas.getContext('2d');
-		thisCat.refresh(canvas.width,canvas.height);
+		thisCat.refresh(autoView.getWidth(),autoView.getHeight());
 		let drac=function(posx,posy,isl,tarc){
+			autoView.view(canvas,ctx);
 			let dx=posx-mouse.x;
 			let dy=posy-mouse.y;
 			let dd=Math.sqrt(dx*dx+dy*dy);
@@ -143,11 +260,7 @@ Cat=function(){
 			if(isl){
 				ctx.drawImage(imageCirmod,-90,-125,180,250);
 			}else if(Math.floor(new Date().getTime()/300+pos[0].x/200+pos[0].y/200)%2==0){
-				if(dd<160){
-					ctx.drawImage(imageCommon,-90*1.2,-125*1.2,180*1.2,250*1.2);
-				}else{
-					ctx.drawImage(imageCommon,-90,-125,180,250);
-				}
+				ctx.drawImage(imageCommon,-90,-125,180,250);
 			}else{
 				ctx.drawImage(imageBlkmod,-90,-125,180,250);
 			}
@@ -161,7 +274,30 @@ Cat=function(){
 		}
 		drac(pos[0].x,pos[0].y,false,arc);
 	}
+	thisCat.behitByBarrier=function(_p1,_p2){
+		if(!life)return;
+		for(let i=0;i<pos.length;i++){
+			let tp=new Point().init(pos[i].x,pos[i].y);
+			for(let j=0;j<20;j++){
+				if(_p1.disTo(tp)<_p2.disTo(tp)){
+					_p2=_p2.midTo(_p1);
+				}else{
+					_p1=_p1.midTo(_p2);
+				}
+			}
+			let dx=tp.x-_p1.x;
+			let dy=tp.y-_p1.y;
+			let dd=Math.sqrt(dx*dx+dy*dy);
+			if(dd<10)dd=10;
+			if(dd<100){
+				if(spd[i].x*dx<0)spd[i].x=0;
+				if(spd[i].y*dy<0)spd[i].y=0;
+				spd[i]={x:spd[i].x+dx/dd*64,y:spd[i].y+dy/dd*64};
+			}
+		}
+	}
 	thisCat.behit=function(_x,_y){
+		if(!life)return;
 		for(let i=0;i<pos.length;i++){
 			let dx=pos[i].x-_x;
 			let dy=pos[i].y-_y;
@@ -173,9 +309,11 @@ Cat=function(){
 		}
 	}
 	thisCat.hit=function(_cat){
+		if(!life)return;
 		_cat.behit(pos[0].x,pos[0].y);
 	}
 	thisCat.onclick=function(mouse){
+		if(!life)return;
 		let dx=pos[0].x-mouse.x;
 		let dy=pos[0].y-mouse.y;
 		let dd=Math.sqrt(dx*dx+dy*dy);
@@ -196,6 +334,10 @@ PlayingPage=function(){
 	let imageCommon;
 	let imageBlkmod;
 	let cats;
+	let barriers;
+	let autoView;
+	let width=1100;
+	let height=700;
 	thisPlayingPage.init=function(_page){
 		page=_page;
 		canvas=document.createElement('canvas');
@@ -205,17 +347,16 @@ PlayingPage=function(){
 		canvas.style.right='0px';
 		canvas.style.bottom='0px';
 		page.append(canvas);
-		canvas.width=window.outerWidth;
-		canvas.height=window.outerHeight;
+		canvas.width=window.innerWidth;
+		canvas.height=window.innerHeight;
+		autoView=new AutoView().init(width,height);
 		life=true;
 		mouse={x:0,y:0};
 		canvas.onmousemove=function(event){
-			mouse.x=event.layerX;
-			mouse.y=event.layerY;
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
 		}
 		canvas.onclick=function(event){
-			mouse.x=event.layerX;
-			mouse.y=event.layerY;
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
 			for(let i=0;i<cats.length;i++){
 				cats[i].onclick(mouse);
 			}
@@ -229,17 +370,30 @@ PlayingPage=function(){
 		setTimeout(thisPlayingPage.draw,20);
 		lastTime=new Date().getTime();
 		cats=[];
-		for(let i=0;i<8;i++){
-			cats[i]=new Cat().init(canvas.width/2,canvas.height/2,Math.random()*2*Math.PI,imageCommon,imageBlkmod,imageCirmod);
-		}
+		barriers=[];
+		cats.push(new Cat().init(width/2,height/2,Math.random()*2*Math.PI,0,imageCommon,imageBlkmod,imageCirmod,autoView));
+		cats.push(new Cat().init(width/2+10,height/2-10,Math.random()*2*Math.PI,1,imageCommon,imageBlkmod,imageCirmod,autoView));
+		barriers.push(new Barrier().init(new Point().init(200,100),new Point().init(600,100),autoView));
+		barriers.push(new Barrier().init(new Point().init(200,100),new Point().init(200,400),autoView));
+		barriers.push(new Barrier().init(new Point().init(200,400),new Point().init(600,500),autoView));
+		barriers.push(new Barrier().init(new Point().init(600,600),new Point().init(600,500),autoView));
+		barriers.push(new Barrier().init(new Point().init(600,600),new Point().init(1000,400),autoView));
+		barriers.push(new Barrier().init(new Point().init(1000,200),new Point().init(1000,400),autoView));
+		barriers.push(new Barrier().init(new Point().init(1000,200),new Point().init(600,100),autoView));
 		return thisPlayingPage;
 	}
 	thisPlayingPage.refresh=function(){
+		if(!life)return;
 		let thisTime=new Date().getTime();
 		let delta=(thisTime-lastTime)/100;
 		for(let i=0;i<cats.length;i++){
 			for(let j=0;j<cats.length;j++){
 				if(i!=j)cats[i].hit(cats[j]);
+			}
+		}
+		for(let i=0;i<barriers.length;i++){
+			for(let j=0;j<cats.length;j++){
+				barriers[i].hit(cats[j]);
 			}
 		}
 		/*
@@ -256,18 +410,39 @@ PlayingPage=function(){
 	thisPlayingPage.draw=function(){
 		if(!life)return;
 		thisPlayingPage.refresh();
-		canvas.width=window.outerWidth;
-		canvas.height=window.outerHeight;
+		canvas.width=window.innerWidth;
+		canvas.height=window.innerHeight;
 		let ctx=canvas.getContext('2d');
+		autoView.view(canvas,ctx);
 		ctx.shadowBlur=0;
 		ctx.fillStyle='rgb(144,213,79)';
-		ctx.fillRect(0,0,canvas.width,canvas.height);
+		ctx.fillRect(0,0,width,height);
 		for(let i=0;i<cats.length;i++){
 			cats[i].draw(canvas,mouse);
 		}
+		for(let i=0;i<barriers.length;i++){
+			barriers[i].draw(canvas,mouse);
+		}
 		setTimeout(thisPlayingPage.draw,20);
 	}
+	thisPlayingPage.clear=function(){
+		page.innerHTML='';
+		for(let i=0;i<cats.length;i++){
+			cats[i].clear();
+		}
+		for(let i=0;i<barriers.length;i++){
+			barriers[i].clear();
+		}
+		life=false;
+	}
 }
+/*
+场景自适应：就瞎jb适应就行，地图和画面长对长宽对宽，然后边界对齐
+选关界面：以后再说
+板子：平平无奇的板子，判定应该还算简单
+猫猫：还是分长短，但是还要分是否旋转
+关卡创造台：以后再说
+*/
 choosePage=function(){
 	let thisChoosePage=this;
 	let canvas;
@@ -278,6 +453,9 @@ choosePage=function(){
 	let imageExpmod;
 	let lastTime;
 	let iwit;
+	let width=1600;
+	let height=900;
+	let autoView;
 	thisChoosePage.init=function(_page){
 		page=_page;
 		canvas=document.createElement('canvas');
@@ -289,14 +467,13 @@ choosePage=function(){
 		page.append(canvas);
 		life=true;
 		mouse={x:0,y:0};
+		autoView=new AutoView().init(width,height);
 		canvas.onmousemove=function(event){
-			mouse.x=event.layerX;
-			mouse.y=event.layerY;
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
 		}
 		canvas.onclick=function(event){
-			mouse.x=event.layerX;
-			mouse.y=event.layerY;
-			if(Math.abs(mouse.x-canvas.width/2)<180&&Math.abs(mouse.y-canvas.height/2)){
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
+			if(Math.abs(mouse.x-width/2)<180&&Math.abs(mouse.y-height/2)){
 				thisChoosePage.clear();
 				new PlayingPage().init(page);
 			}
@@ -316,12 +493,13 @@ choosePage=function(){
 	}
 	thisChoosePage.draw=function(){
 		if(!life)return;
-		canvas.width=window.outerWidth;
-		canvas.height=window.outerHeight;
+		canvas.width=window.innerWidth;
+		canvas.height=window.innerHeight;
 		let ctx=canvas.getContext('2d');
+		autoView.view(canvas,ctx);
 		ctx.shadowBlur=0;
 		ctx.fillStyle='rgb(144,213,79)';
-		ctx.fillRect(0,0,canvas.width,canvas.height);
+		ctx.fillRect(0,0,width,height);
 		if(new Date().getTime()-lastTime>160){
 			if(Math.random()<0.3){
 				lastTime=new Date().getTime();
@@ -330,9 +508,9 @@ choosePage=function(){
 			}
 		}
 		if(iwit=='common'){
-			ctx.drawImage(imageCommon,canvas.width/2-180,canvas.height/2-250,360,500);
+			ctx.drawImage(imageCommon,width/2-180,height/2-250,360,500);
 		}else{
-			ctx.drawImage(imageExpmod,canvas.width/2-190,canvas.height/2-240,360,500);
+			ctx.drawImage(imageExpmod,width/2-190,height/2-240,360,500);
 		}
 		setTimeout(thisChoosePage.draw,20);
 	}
