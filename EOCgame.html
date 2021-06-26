@@ -611,7 +611,7 @@ PlayingPage=function(){
 		imageHome.src=homeImageSrc;
 		imageNext=new Image();
 		imageNext.src=nextImageSrc;
-		setTimeout(thisPlayingPage.draw,20);
+		setTimeout(thisPlayingPage.draw,0);
 		lastTime=new Date().getTime();
 		
 		cats=[];
@@ -753,10 +753,48 @@ CreatingPage=function(){
 	let thisCreatingPage=this;
 	let life;
 	let page;
-	thisCreatingPage.init=function(_page){
+	let canvas;
+	let imageHome;
+	let homeButton;
+	let index;
+	let width;
+	let height;
+	let autoView;
+	let mouse;
+	thisCreatingPage.init=function(_page,_index){
 		life=true;
 		page=_page;
-		setTimeout(thisCreatingPage.draw,20);
+		index=_index;
+		canvas=document.createElement('canvas');
+		canvas.style.position='fixed';
+		canvas.style.left='0px';
+		canvas.style.top='0px';
+		canvas.style.right='0px';
+		canvas.style.bottom='0px';
+		page.append(canvas);
+		canvas.width=window.innerWidth;
+		canvas.height=window.innerHeight;
+		width=sites[index].width;
+		height=sites[index].height;
+		autoView=new AutoView().init(width,height);
+		imageHome=new Image();
+		imageHome.src=homeImageSrc;
+		homeButton=new Button().init(new Point().init(0,0),new Point().init(150,150),imageHome,autoView,function(){
+			if(!life)return;
+			thisCreatingPage.clear();
+			new ChoosingPage().init(page,index);
+		});
+		mouse=new Point().init(0,0);
+		canvas.onmousemove=function(event){
+			if(!life)return;
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
+		}
+		canvas.onclick=function(event){
+			if(!life)return;
+			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
+			homeButton.onclick(mouse);
+		}
+		setTimeout(thisCreatingPage.draw,0);
 		return thisCreatingPage;
 	}
 	thisCreatingPage.clear=function(){
@@ -766,6 +804,18 @@ CreatingPage=function(){
 	}
 	thisCreatingPage.draw=function(){
 		if(!life)return;
+		canvas.width=window.innerWidth;
+		canvas.height=window.innerHeight;
+		let ctx=canvas.getContext('2d');
+		autoView.view(canvas,ctx);
+		ctx.shadowBlur=0;
+		ctx.fillStyle='rgb(219,237,215)';
+		ctx.fillRect(0,0,width,height);
+		homeButton.draw(canvas,mouse);
+		autoView.view(canvas,ctx);
+		ctx.fillStyle='rgb(0,0,0)';
+		ctx.font='72pt bold 黑体';
+		ctx.fillText('关卡创造台尚未开放',125,300);
 		setTimeout(thisCreatingPage.draw,20);
 	}
 }
@@ -781,9 +831,14 @@ Thumbnail=function(){
 	let autoView;
 	let barriers;
 	let clickTime;
+	let lastChgTime;
+	let lastPoint;
+	let newPoint;
 	let NullThumbnail=function(){
 		let thisNullThumbnail=this;
 		let life;
+		thisNullThumbnail.slide=function(_newPoint){
+		}
 		thisNullThumbnail.init=function(){
 			life=false;
 			return thisNullThumbnail;
@@ -799,15 +854,22 @@ Thumbnail=function(){
 			return;
 		}
 	}
+	thisThumbnail.slide=function(_newPoint){
+		lastPoint=pos.clone();
+		newPoint=_newPoint;
+		lastChgTime=new Date().getTime();
+	}
 	thisThumbnail.init=function(_pos,_index,_autoView){
 		life=true;
 		pos=_pos;
 		index=_index;
+		if(index<1||index>关卡数)return new NullThumbnail().init();
 		autoView=_autoView;
 		width=sites[index].width;
 		height=sites[index].height;
-		barriers=[];
 		clickTime=null;
+		lastChgTime=null;
+		barriers=[];
 		let forEachDo=function(list,f){for(let i=0;i<list.length;i++)f(list[i]);};
 		forEachDo(sites[index].barriers,function(barv){
 			let p1=new Point().init((barv.p1x-width/2)/2+pos.x,(barv.p1y-height/2)/2+pos.y);
@@ -815,9 +877,6 @@ Thumbnail=function(){
 			barriers.push(new Barrier().init(p1,p2,autoView));
 		});
 		return thisThumbnail;
-	}
-	thisThumbnail.resetInit=function(){
-		return new NullThumbnail().init();
 	}
 	thisThumbnail.onclick=function(mouse){
 		if(!life)return false;
@@ -834,13 +893,40 @@ Thumbnail=function(){
 		}
 		life=false;
 	}
+	thisThumbnail.refresh=function(){
+		if(!life)return;
+		if(lastChgTime){
+			let deltaTime=(new Date().getTime()-lastChgTime)/200;
+			if(deltaTime>1){
+				pos=newPoint.clone();
+				lastChgTime=null;
+			}
+			let nx=lastPoint.x*(1-deltaTime)+newPoint.x*deltaTime;
+			let ny=lastPoint.y*(1-deltaTime)+newPoint.y*deltaTime;
+			pos=new Point().init(nx,ny);
+			for(let i=0;i<barriers.length;i++){
+				barriers[i].clear();
+			}
+			barriers=[];
+			let forEachDo=function(list,f){for(let i=0;i<list.length;i++)f(list[i]);};
+			forEachDo(sites[index].barriers,function(barv){
+				let p1=new Point().init((barv.p1x-width/2)/2+pos.x,(barv.p1y-height/2)/2+pos.y);
+				let p2=new Point().init((barv.p2x-width/2)/2+pos.x,(barv.p2y-height/2)/2+pos.y);
+				barriers.push(new Barrier().init(p1,p2,autoView));
+			});
+		}
+	}
 	thisThumbnail.draw=function(canvas,mouse){
 		if(!life)return;
+		thisThumbnail.refresh();
 		let ctx=canvas.getContext('2d');
 		autoView.view(canvas,ctx);
 		if(clickTime){
 			let deltaTime=(new Date().getTime()-clickTime)/200;
-			if(deltaTime>2)deltaTime=0;
+			if(deltaTime>2){
+				deltaTime=0;
+				clickTime=null;
+			}
 			if(deltaTime>1)deltaTime=2-deltaTime;
 			autoView.scale(ctx,pos,1+deltaTime*0.05);
 		}
@@ -872,9 +958,11 @@ ChoosingPage=function(){
 	let imageFunc;
 	let homeButton;
 	let funcButton;
+	let lastChgTime;
 	thisChoosingPage.init=function(_page,_index){
 		page=_page;
 		index=_index;
+		status='normal';
 		canvas=document.createElement('canvas');
 		canvas.style.position='fixed';
 		canvas.style.left='0px';
@@ -884,8 +972,8 @@ ChoosingPage=function(){
 		page.append(canvas);
 		life=true;
 		mouse=new Point().init(0,0);
-		width=sites[index].width;
-		height=sites[index].height;
+		width=1200;
+		height=700;
 		autoView=new AutoView().init(width,height);
 		canvas.onmousemove=function(event){
 			if(!life)return;
@@ -905,22 +993,36 @@ ChoosingPage=function(){
 			}else if(thumbnailL.onclick(mouse)){
 				setTimeout(function(){
 					if(!life)return;
-					thisChoosingPage.clear();
-					new ChoosingPage().init(page,index-1);
-				},200);
+					index--;
+					status='left';
+					lastChgTime=new Date().getTime();
+					thumbnailR.clear();
+					thumbnailR=thumbnailM;
+					thumbnailM=thumbnailL;
+					thumbnailL=new Thumbnail().init(new Point().init(-width/2,height/2),index-1,autoView);
+					thumbnailL.slide(new Point().init(0,height/2));
+					thumbnailM.slide(new Point().init(width/2,height/2));
+					thumbnailR.slide(new Point().init(width,height/2));
+				},0);
 			}else if(thumbnailR.onclick(mouse)){
 				setTimeout(function(){
 					if(!life)return;
-					thisChoosingPage.clear();
-					new ChoosingPage().init(page,index+1);
-				},200);
+					index++;
+					status='right';
+					lastChgTime=new Date().getTime();
+					thumbnailL.clear();
+					thumbnailL=thumbnailM;
+					thumbnailM=thumbnailR;
+					thumbnailR=new Thumbnail().init(new Point().init(width*1.5,height/2),index+1,autoView);
+					thumbnailL.slide(new Point().init(0,height/2));
+					thumbnailM.slide(new Point().init(width/2,height/2));
+					thumbnailR.slide(new Point().init(width,height/2));
+				},0);
 			}
 		}
-		if(index==1)thumbnailL=new Thumbnail().resetInit();
-		else thumbnailL=new Thumbnail().init(new Point().init(0,height/2),index-1,autoView);
+		thumbnailL=new Thumbnail().init(new Point().init(0,height/2),index-1,autoView);
 		thumbnailM=new Thumbnail().init(new Point().init(width/2,height/2),index,autoView);
-		if(index==关卡数)thumbnailR=new Thumbnail().resetInit();
-		else thumbnailR=new Thumbnail().init(new Point().init(width,height/2),index+1,autoView);
+		thumbnailR=new Thumbnail().init(new Point().init(width,height/2),index+1,autoView);
 		imageHome=new Image();
 		imageHome.src=homeImageSrc;
 		imageFunc=new Image();
@@ -932,8 +1034,10 @@ ChoosingPage=function(){
 		});
 		funcButton=new Button().init(new Point().init(width-150,0),new Point().init(width,150),imageFunc,autoView,function(){
 			if(!life)return;
+			thisChoosingPage.clear();
+			new CreatingPage().init(page,index);
 		});
-		setTimeout(thisChoosingPage.draw,20);
+		setTimeout(thisChoosingPage.draw,0);
 		return thisChoosingPage;
 	}
 	thisChoosingPage.clear=function(){
@@ -1025,7 +1129,7 @@ StartPage=function(){
 		imageExpmod.src=expmodImageSrc;
 		lastTime=new Date().getTime();
 		iwit='common';
-		setTimeout(thisStartPage.draw,20);
+		setTimeout(thisStartPage.draw,0);
 		return thisStartPage;
 	}
 	thisStartPage.clear=function(){
