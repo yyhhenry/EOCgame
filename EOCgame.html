@@ -33,10 +33,12 @@ let Point;
 let AutoView;
 let Button;
 let Thumbnail;
-const 关卡数=2;
+const 关卡数=4;
 let sites=[];
 sites[1]={"width":1100,"height":700,"cats":[{"x":550,"y":350,"arc":2,"arcSpd":0},{"x":560,"y":340,"arc":4,"arcSpd":1}],"barriers":[{"p1x":200,"p1y":100,"p2x":600,"p2y":100},{"p1x":200,"p1y":100,"p2x":200,"p2y":400},{"p1x":200,"p1y":400,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":1000,"p2y":400},{"p1x":1000,"p1y":200,"p2x":1000,"p2y":400},{"p1x":1000,"p1y":200,"p2x":600,"p2y":100}],"scoreBalls":[{"x":900,"y":300},{"x":950,"y":250}],"poisonBalls":[{"x":300,"y":250}]};
 sites[2]={"width":1200,"height":800,"cats":[{"x":800,"y":600,"arc":4,"arcSpd":-1}],"barriers":[{"p1x":200,"p1y":100,"p2x":600,"p2y":100},{"p1x":600,"p1y":0,"p2x":600,"p2y":100},{"p1x":600,"p1y":0,"p2x":1200,"p2y":100},{"p1x":1100,"p1y":800,"p2x":1200,"p2y":100},{"p1x":1100,"p1y":750,"p2x":600,"p2y":800},{"p1x":200,"p1y":100,"p2x":200,"p2y":400},{"p1x":200,"p1y":400,"p2x":600,"p2y":500},{"p1x":600,"p1y":800,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":900,"p2y":400},{"p1x":950,"p1y":250,"p2x":900,"p2y":400}],"scoreBalls":[{"x":850,"y":300}],"poisonBalls":[{"x":650,"y":200}]};
+sites[3]={"width":1200,"height":800,"cats":[{"x":422.69129287598946,"y":615.3034300791556,"arc":0.48484584660688346,"arcSpd":1}],"barriers":[{"p1x":391.02902374670185,"p1y":184.69656992084433,"p2x":727.7044854881267,"p2y":168.86543535620052},{"p1x":726.6490765171504,"p1y":169.92084432717678,"p2x":1011.6094986807387,"p2y":431.6622691292876},{"p1x":1012.664907651715,"p1y":444.3271767810026,"p2x":865.9630606860159,"p2y":705.0131926121372},{"p1x":862.7968337730871,"p1y":705.0131926121372,"p2x":400.52770448548813,"p2y":719.7889182058047},{"p1x":566.2269129287599,"p1y":713.4564643799472,"p2x":575.7255936675461,"p2y":414.7757255936675},{"p1x":401.5831134564644,"p1y":710.2902374670184,"p2x":210.55408970976254,"p2y":540.3693931398417},{"p1x":207.38786279683376,"p1y":527.7044854881267,"p2x":392.0844327176781,"p2y":177.30870712401054}],"scoreBalls":[{"x":430.0791556728232,"y":471.76781002638523},{"x":596.8337730870712,"y":265.9630606860158},{"x":781.5303430079156,"y":466.49076517150394},{"x":726.6490765171504,"y":637.467018469657}],"poisonBalls":[{"x":397.36147757255935,"y":254.35356200527704},{"x":380.4749340369393,"y":308.17941952506595},{"x":356.20052770448547,"y":356.7282321899736},{"x":338.2585751978892,"y":371.50395778364117},{"x":616.88654353562,"y":416.88654353562004},{"x":656.9920844327177,"y":460.15831134564644},{"x":669.6569920844327,"y":498.15303430079155},{"x":658.0474934036939,"y":531.9261213720316},{"x":623.2189973614776,"y":551.9788918205804},{"x":899.7361477572559,"y":375.72559366754615},{"x":943.0079155672823,"y":448.54881266490764},{"x":934.5646437994723,"y":479.155672823219},{"x":929.287598944591,"y":491.82058047493405},{"x":900.7915567282322,"y":510.8179419525066}]};
+sites[4]={"width":1100,"height":700,"cats":[{"x":363.4564643799473,"y":475.5936675461741,"arc":2.503631654320283,"arcSpd":1}],"barriers":[{"p1x":335.7519788918206,"p1y":190.23746701846963,"p2x":709.7625329815304,"p2y":192.08443271767808},{"p1x":708.8390501319261,"p1y":191.16094986807386,"p2x":907.3878627968338,"p2y":393.4036939313984},{"p1x":906.4643799472295,"p1y":394.3271767810026,"p2x":753.1662269129288,"p2y":579.9472295514512},{"p1x":752.2427440633246,"p1y":581.7941952506595,"p2x":372.6912928759895,"p2y":576.2532981530343},{"p1x":367.15039577836416,"p1y":572.5593667546174,"p2x":200.00000000000006,"p2y":398.9445910290237},{"p1x":199.07651715039586,"p1y":394.3271767810026,"p2x":342.2163588390502,"p2y":189.3139841688654},{"p1x":361.60949868073885,"p1y":230.87071240105539,"p2x":255.40897097625336,"p2y":383.24538258575194},{"p1x":705.1451187335092,"p1y":229.94722955145116,"p2x":841.820580474934,"p2y":384.16886543535617},{"p1x":402.2427440633246,"p1y":531.9261213720316,"p2x":715.3034300791556,"p2y":548.5488126649076}],"scoreBalls":[{"x":368.9973614775726,"y":289.05013192612137},{"x":544.4591029023748,"y":508.83905013192606},{"x":759.6306068601583,"y":325.065963060686},{"x":574.9340369393141,"y":405.4089709762533}],"poisonBalls":[{"x":451.18733509234835,"y":222.5593667546174},{"x":542.6121372031663,"y":225.32981530343005},{"x":644.1952506596307,"y":229.02374670184693}]};
 let tk=0;
 
 Button=function(){
@@ -48,6 +50,7 @@ Button=function(){
 	let autoView;
 	let buttonImage;
 	let clickTime;
+	let clicked;
 	thisButton.init=function(_p1,_p2,_buttonImage,_autoView,_f){
 		life=true;
 		p1=_p1.clone();
@@ -56,14 +59,23 @@ Button=function(){
 		autoView=_autoView;
 		buttonImage=_buttonImage;
 		clickTime=null;
+		clicked=false;
 		return thisButton;
 	}
 	thisButton.onclick=function(mouse){
-		if(!life)return;
+		if(!life)return false;
 		if(mouse.x>=p1.x&&mouse.x<=p2.x&&mouse.y>=p1.y&&mouse.y<=p2.y){
-			setTimeout(f,200);
-			clickTime=new Date().getTime();
+			if(!clicked){
+				clicked=true;
+				setTimeout(function(){
+					clicked=false;
+					f();
+				},200);
+				clickTime=new Date().getTime();
+			}
+			return true;
 		}
+		return false;
 	}
 	thisButton.draw=function(canvas,mouse){
 		if(!life)return;
@@ -90,6 +102,10 @@ PoisonBall=function(){
 	let life;
 	let autoView;
 	let imagePoisonBall;
+	thisPoisonBall.onclick=function(mouse){
+		if(!life)return false;
+		return pos.disTo(mouse)<30;
+	}
 	thisPoisonBall.init=function(_pos,_autoView,_imagePoisonBall){
 		pos=_pos.clone();
 		autoView=_autoView;
@@ -121,6 +137,7 @@ PoisonBall=function(){
 		}
 	}
 	thisPoisonBall.toJSON=function(){
+		if(!life)return null;
 		return {x:pos.x,y:pos.y};
 	}
 }
@@ -130,12 +147,16 @@ ScoreBall=function(){
 	let pos;
 	let life;
 	let autoView;
-	let imageScoreball;
-	thisScoreBall.init=function(_pos,_autoView,_imageScoreball){
+	let imageScoreBall;
+	thisScoreBall.onclick=function(mouse){
+		if(!life)return false;
+		return pos.disTo(mouse)<30;
+	}
+	thisScoreBall.init=function(_pos,_autoView,_imageScoreBall){
 		pos=_pos.clone();
 		autoView=_autoView;
 		life=true;
-		imageScoreball=_imageScoreball;
+		imageScoreBall=_imageScoreBall;
 		return thisScoreBall;
 	}
 	thisScoreBall.clear=function(){
@@ -148,7 +169,7 @@ ScoreBall=function(){
 		let ctx=canvas.getContext('2d');
 		autoView.view(canvas,ctx);
 		ctx.translate(pos.x,pos.y);
-		ctx.drawImage(imageScoreball,-40,-60,80,120);
+		ctx.drawImage(imageScoreBall,-40,-60,80,120);
 	}
 	thisScoreBall.behit=function(catpos){
 		if(!life)return false;
@@ -161,6 +182,7 @@ ScoreBall=function(){
 		return false;
 	}
 	thisScoreBall.toJSON=function(){
+		if(!life)return null;
 		return {x:pos.x,y:pos.y};
 	}
 }
@@ -283,6 +305,19 @@ Barrier=function(){
 		if(!life)return;
 		life=false;
 	}
+	thisBarrier.onclick=function(mouse){
+		if(!life)return false;
+		let _p1=p1.clone();
+		let _p2=p2.clone();
+		for(let j=0;j<20;j++){
+			if(_p1.disTo(mouse)<_p2.disTo(mouse)){
+				_p2=_p2.midTo(_p1);
+			}else{
+				_p1=_p1.midTo(_p2);
+			}
+		}
+		return _p1.disTo(mouse)<30;
+	}
 	thisBarrier.init=function(_p1,_p2,_autoView){
 		life=true;
 		p1=_p1.clone();
@@ -307,6 +342,7 @@ Barrier=function(){
 		_cat.behitByBarrier(p1.clone(),p2.clone());
 	}
 	thisBarrier.toJSON=function(){
+		if(!life)return null;
 		return {p1x:p1.x,p1y:p1.y,p2x:p2.x,p2y:p2.y};
 	}
 }
@@ -429,10 +465,9 @@ Cat=function(){
 		}
 		lastTime=thisTime;
 	}
-	thisCat.draw=function(canvas,mouse){
+	thisCat.drawOnly=function(canvas,mouse){
 		if(!life)return;
 		let ctx=canvas.getContext('2d');
-		thisCat.refresh(autoView.getWidth(),autoView.getHeight());
 		let drac=function(posx,posy,isl,tarc){
 			autoView.view(canvas,ctx);
 			let dx=posx-mouse.x;
@@ -456,6 +491,11 @@ Cat=function(){
 			if(i==1)arc=getArc(dx,dy);
 		}
 		drac(pos[0].x,pos[0].y,false,arc);
+	}
+	thisCat.draw=function(canvas,mouse){
+		if(!life)return;
+		thisCat.refresh(autoView.getWidth(),autoView.getHeight());
+		thisCat.drawOnly(canvas,mouse);
 	}
 	thisCat.behitByBarrier=function(_p1,_p2){
 		if(!life)return;
@@ -504,18 +544,32 @@ Cat=function(){
 		return poisonball.behit(thisCat,new Point().init(pos[0].x,pos[0].y));
 	}
 	thisCat.onclick=function(mouse){
-		if(!life)return;
+		if(!life)return false;
 		let dx=pos[0].x-mouse.x;
 		let dy=pos[0].y-mouse.y;
 		let dd=Math.sqrt(dx*dx+dy*dy);
-		if(dd<160){
+		if(dd<100){
 			ep=true;
 			sc=false;
 			lastChgTime=new Date().getTime();
+			return true;
 		}
+		return false;
 	}
 	thisCat.toJSON=function(){
+		if(!life)return null;
 		return {x:pos[0].x,y:pos[0].y,arc:arc,arcSpd:arcSpd};
+	}
+	thisCat.lookAt=function(point){
+		if(!life)return;
+		arc=getArc(-point.x+pos[0].x,-point.y+pos[0].y);
+	}
+	thisCat.setArcSpd=function(){
+		if(!life)return;
+		if(arcSpd==1)arcSpd=-1;
+		else if(arcSpd==-1)arcSpd=0;
+		else arcSpd=1;
+		return arcSpd;
 	}
 }
 
@@ -529,7 +583,7 @@ PlayingPage=function(){
 	let imageCommon;
 	let imageBlkmod;
 	let imageCirmod;
-	let imageScoreball;
+	let imageScoreBall;
 	let imagePoisonBall;
 	let imageReplay;
 	let imageHome;
@@ -549,7 +603,10 @@ PlayingPage=function(){
 	thisPlayingPage.toJSON=function(){
 		let listToJSON=function(list){
 			let ans=[];
-			for(let i=0;i<list.length;i++)ans.push(list[i].toJSON());
+			for(let i=0;i<list.length;i++){
+				let res=list[i].toJSON();
+				if(res!=null)ans.push(res);
+			}
 			return ans;
 		}
 		return {
@@ -601,8 +658,8 @@ PlayingPage=function(){
 		imageBlkmod.src=blkmodImageSrc;
 		imageCirmod=new Image();
 		imageCirmod.src=cirmodImageSrc;
-		imageScoreball=new Image();
-		imageScoreball.src=scoreballImageSrc;
+		imageScoreBall=new Image();
+		imageScoreBall.src=scoreballImageSrc;
 		imagePoisonBall=new Image();
 		imagePoisonBall.src=poisonballImageSrc;
 		imageReplay=new Image();
@@ -629,7 +686,7 @@ PlayingPage=function(){
 		});
 		forEachDo(sites[index].scoreBalls,function(scrv){
 			let pos=new Point().init(scrv.x,scrv.y);
-			scoreBalls.push(new ScoreBall().init(pos,autoView,imageScoreball));
+			scoreBalls.push(new ScoreBall().init(pos,autoView,imageScoreBall));
 		});
 		forEachDo(sites[index].poisonBalls,function(scrv){
 			let pos=new Point().init(scrv.x,scrv.y);
@@ -754,13 +811,45 @@ CreatingPage=function(){
 	let life;
 	let page;
 	let canvas;
+	let imageCommon;
+	let imageBlkmod;
+	let imageCirmod;
+	let imageScoreBall;
+	let imagePoisonBall;
 	let imageHome;
+	let imageNext;
 	let homeButton;
+	let nextButton;
 	let index;
 	let width;
 	let height;
 	let autoView;
 	let mouse;
+	let editTar;
+	let editStatus;
+	const editTarSet=['猫','转','障','毒','点','删'];
+	let cats;
+	let barriers;
+	let poisonBalls;
+	let scoreBalls;
+	thisCreatingPage.toJSON=function(){
+		let listToJSON=function(list){
+			let ans=[];
+			for(let i=0;i<list.length;i++){
+				let res=list[i].toJSON();
+				if(res!=null)ans.push(res);
+			}
+			return ans;
+		}
+		return {
+			width:width,
+			height:height,
+			cats:listToJSON(cats),
+			barriers:listToJSON(barriers),
+			scoreBalls:listToJSON(scoreBalls),
+			poisonBalls:listToJSON(poisonBalls)
+		};
+	}
 	thisCreatingPage.init=function(_page,_index){
 		life=true;
 		page=_page;
@@ -779,6 +868,24 @@ CreatingPage=function(){
 		autoView=new AutoView().init(width,height);
 		imageHome=new Image();
 		imageHome.src=homeImageSrc;
+		imageNext=new Image();
+		imageNext.src=nextImageSrc;
+		imageCommon=new Image();
+		imageCommon.src=commonImageSrc;
+		imageBlkmod=new Image();
+		imageBlkmod.src=blkmodImageSrc;
+		imageCirmod=new Image();
+		imageCirmod.src=cirmodImageSrc;
+		imageScoreBall=new Image();
+		imageScoreBall.src=scoreballImageSrc;
+		imagePoisonBall=new Image();
+		imagePoisonBall.src=poisonballImageSrc;
+		nextButton=new Button().init(new Point().init(width-150,0),new Point().init(width,150),imageNext,autoView,function(){
+			if(!life)return;
+			let result=thisCreatingPage.toJSON();
+			console.log(JSON.stringify(result));
+			alert('输出完成\n请前往控制台查看结果');
+		});
 		homeButton=new Button().init(new Point().init(0,0),new Point().init(150,150),imageHome,autoView,function(){
 			if(!life)return;
 			thisCreatingPage.clear();
@@ -792,8 +899,85 @@ CreatingPage=function(){
 		canvas.onclick=function(event){
 			if(!life)return;
 			mouse=autoView.translate(canvas,new Point().init(event.layerX,event.layerY));
-			homeButton.onclick(mouse);
+			if(homeButton.onclick(mouse))return;
+			if(nextButton.onclick(mouse))return;
+			if(mouse.x>0&&mouse.x<150&&mouse.y>150&&mouse.y<300){
+				editTar++;
+				if(editTar>=editTarSet.length)editTar=0;
+				editStatus=null;
+				return;
+			}
+			if(!(mouse.x>0&&mouse.x<width&&mouse.y>0&&mouse.y<height))return;
+			if(editTarSet[editTar]=='猫'){
+				if(editStatus==null){
+					editStatus=new Cat().init(mouse.x,mouse.y,Math.PI/2,0,imageCommon,imageBlkmod,imageCirmod,autoView);
+					cats.push(editStatus);
+				}else{
+					editStatus.lookAt(mouse);
+					editStatus=null;
+				}
+			}else if(editTarSet[editTar]=='转'){
+				let cr=false;
+				for(let i=0;i<cats.length;i++){
+					if(cats[i].onclick(mouse)){
+						cr=true;
+						editStatus=cats[i].setArcSpd();
+						break;
+					}
+				}
+				if(!cr)editStatus=null;
+			}else if(editTarSet[editTar]=='障'){
+				if(editStatus==null){
+					editStatus=mouse.clone();
+				}else{
+					barriers.push(new Barrier().init(editStatus.clone(),mouse.clone(),autoView));
+					editStatus=null;
+				}
+			}else if(editTarSet[editTar]=='毒'){
+				poisonBalls.push(new PoisonBall().init(mouse.clone(),autoView,imagePoisonBall));
+			}else if(editTarSet[editTar]=='点'){
+				scoreBalls.push(new ScoreBall().init(mouse.clone(),autoView,imageScoreBall));
+			}else if(editTarSet[editTar]=='删'){
+				let cr=false;
+				for(let i=0;i<cats.length;i++){
+					if(cats[i].onclick(mouse)){
+						cr=true;
+						cats[i].clear();
+						break;
+					}
+				}
+				if(cr)return;
+				for(let i=0;i<barriers.length;i++){
+					if(barriers[i].onclick(mouse)){
+						cr=true;
+						barriers[i].clear();
+						break;
+					}
+				}
+				if(cr)return;
+				for(let i=0;i<poisonBalls.length;i++){
+					if(poisonBalls[i].onclick(mouse)){
+						cr=true;
+						poisonBalls[i].clear();
+						break;
+					}
+				}
+				if(cr)return;
+				for(let i=0;i<scoreBalls.length;i++){
+					if(scoreBalls[i].onclick(mouse)){
+						cr=true;
+						scoreBalls[i].clear();
+						break;
+					}
+				}
+			}
 		}
+		editTar=0;
+		editStatus=null;
+		cats=[];
+		barriers=[];
+		poisonBalls=[];
+		scoreBalls=[];
 		setTimeout(thisCreatingPage.draw,0);
 		return thisCreatingPage;
 	}
@@ -811,11 +995,61 @@ CreatingPage=function(){
 		ctx.shadowBlur=0;
 		ctx.fillStyle='rgb(219,237,215)';
 		ctx.fillRect(0,0,width,height);
+		for(let i=0;i<cats.length;i++){
+			cats[i].drawOnly(canvas,mouse);
+		}
+		for(let i=0;i<barriers.length;i++){
+			barriers[i].draw(canvas,mouse);
+		}
+		for(let i=0;i<scoreBalls.length;i++){
+			scoreBalls[i].draw(canvas,mouse);
+		}
+		for(let i=0;i<poisonBalls.length;i++){
+			poisonBalls[i].draw(canvas,mouse);
+		}
 		homeButton.draw(canvas,mouse);
+		nextButton.draw(canvas,mouse);
 		autoView.view(canvas,ctx);
+		ctx.fillStyle='rgb(254,235,214)';
+		ctx.fillRect(20,170,110,110);
 		ctx.fillStyle='rgb(0,0,0)';
 		ctx.font='72pt bold 黑体';
-		ctx.fillText('关卡创造台尚未开放',125,300);
+		ctx.fillText(editTarSet[editTar],25,255);
+		let statusText=[];
+		if(editTarSet[editTar]=='猫'){
+			if(editStatus==null){
+				statusText=['点击确定','新增猫猫','坐标'];
+			}else{
+				statusText=['点击确定','当前猫猫','朝向'];
+			}
+		}else if(editTarSet[editTar]=='转'){
+			if(editStatus==null){
+				statusText=['点击改变','特定猫猫','转速'];
+			}else if(editStatus==0){
+				statusText=['已经确定','特定猫猫','静止'];
+			}else if(editStatus==1){
+				statusText=['已经确定','特定猫猫','顺时针'];
+			}else if(editStatus==-1){
+				statusText=['已经确定','特定猫猫','逆时针'];
+			}
+		}else if(editTarSet[editTar]=='障'){
+			if(editStatus==null){
+				statusText=['点击确定','新增障碍','坐标1'];
+			}else{
+				let pos1='{'+Math.floor(editStatus.x)+','+Math.floor(editStatus.y)+'}';
+				statusText=['点击确定','新增障碍',pos1+'->坐标2'];
+			}
+		}else if(editTarSet[editTar]=='毒'){
+			statusText=['点击确定','新增毒球','坐标'];
+		}else if(editTarSet[editTar]=='点'){
+			statusText=['点击确定','新增分数球','坐标'];
+		}else if(editTarSet[editTar]=='删'){
+			statusText=['点击选择','需要删除的','元素'];
+		}
+		ctx.font='20pt bold 黑体';
+		for(let i=0;i<statusText.length;i++){
+			ctx.fillText(statusText[i],25,332+i*35);
+		}
 		setTimeout(thisCreatingPage.draw,20);
 	}
 }
