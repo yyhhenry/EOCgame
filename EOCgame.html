@@ -33,12 +33,14 @@ let Point;
 let AutoView;
 let Button;
 let Thumbnail;
-const 关卡数=4;
+const 关卡数=6;
 let sites=[];
 sites[1]={"width":1100,"height":700,"cats":[{"x":550,"y":350,"arc":2,"arcSpd":0},{"x":560,"y":340,"arc":4,"arcSpd":1}],"barriers":[{"p1x":200,"p1y":100,"p2x":600,"p2y":100},{"p1x":200,"p1y":100,"p2x":200,"p2y":400},{"p1x":200,"p1y":400,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":1000,"p2y":400},{"p1x":1000,"p1y":200,"p2x":1000,"p2y":400},{"p1x":1000,"p1y":200,"p2x":600,"p2y":100}],"scoreBalls":[{"x":900,"y":300},{"x":950,"y":250}],"poisonBalls":[{"x":300,"y":250}]};
 sites[2]={"width":1200,"height":800,"cats":[{"x":800,"y":600,"arc":4,"arcSpd":-1}],"barriers":[{"p1x":200,"p1y":100,"p2x":600,"p2y":100},{"p1x":600,"p1y":0,"p2x":600,"p2y":100},{"p1x":600,"p1y":0,"p2x":1200,"p2y":100},{"p1x":1100,"p1y":800,"p2x":1200,"p2y":100},{"p1x":1100,"p1y":750,"p2x":600,"p2y":800},{"p1x":200,"p1y":100,"p2x":200,"p2y":400},{"p1x":200,"p1y":400,"p2x":600,"p2y":500},{"p1x":600,"p1y":800,"p2x":600,"p2y":500},{"p1x":600,"p1y":600,"p2x":900,"p2y":400},{"p1x":950,"p1y":250,"p2x":900,"p2y":400}],"scoreBalls":[{"x":850,"y":300}],"poisonBalls":[{"x":650,"y":200}]};
-sites[3]={"width":1200,"height":800,"cats":[{"x":422.69129287598946,"y":615.3034300791556,"arc":0.48484584660688346,"arcSpd":1}],"barriers":[{"p1x":391.02902374670185,"p1y":184.69656992084433,"p2x":727.7044854881267,"p2y":168.86543535620052},{"p1x":726.6490765171504,"p1y":169.92084432717678,"p2x":1011.6094986807387,"p2y":431.6622691292876},{"p1x":1012.664907651715,"p1y":444.3271767810026,"p2x":865.9630606860159,"p2y":705.0131926121372},{"p1x":862.7968337730871,"p1y":705.0131926121372,"p2x":400.52770448548813,"p2y":719.7889182058047},{"p1x":566.2269129287599,"p1y":713.4564643799472,"p2x":575.7255936675461,"p2y":414.7757255936675},{"p1x":401.5831134564644,"p1y":710.2902374670184,"p2x":210.55408970976254,"p2y":540.3693931398417},{"p1x":207.38786279683376,"p1y":527.7044854881267,"p2x":392.0844327176781,"p2y":177.30870712401054}],"scoreBalls":[{"x":430.0791556728232,"y":471.76781002638523},{"x":596.8337730870712,"y":265.9630606860158},{"x":781.5303430079156,"y":466.49076517150394},{"x":726.6490765171504,"y":637.467018469657}],"poisonBalls":[{"x":397.36147757255935,"y":254.35356200527704},{"x":380.4749340369393,"y":308.17941952506595},{"x":356.20052770448547,"y":356.7282321899736},{"x":338.2585751978892,"y":371.50395778364117},{"x":616.88654353562,"y":416.88654353562004},{"x":656.9920844327177,"y":460.15831134564644},{"x":669.6569920844327,"y":498.15303430079155},{"x":658.0474934036939,"y":531.9261213720316},{"x":623.2189973614776,"y":551.9788918205804},{"x":899.7361477572559,"y":375.72559366754615},{"x":943.0079155672823,"y":448.54881266490764},{"x":934.5646437994723,"y":479.155672823219},{"x":929.287598944591,"y":491.82058047493405},{"x":900.7915567282322,"y":510.8179419525066}]};
+sites[3]={"width":1200,"height":800,"cats":[{"x":422.69129287598946,"y":615.3034300791556,"arc":0.48484584660688346,"arcSpd":1}],"barriers":[{"p1x":391.02902374670185,"p1y":184.69656992084433,"p2x":727.7044854881267,"p2y":168.86543535620052},{"p1x":726.6490765171504,"p1y":169.92084432717678,"p2x":1011.6094986807387,"p2y":431.6622691292876},{"p1x":1012.664907651715,"p1y":444.3271767810026,"p2x":865.9630606860159,"p2y":705.0131926121372},{"p1x":862.7968337730871,"p1y":705.0131926121372,"p2x":400.52770448548813,"p2y":719.7889182058047},{"p1x":566.2269129287599,"p1y":713.4564643799472,"p2x":575.7255936675461,"p2y":414.7757255936675},{"p1x":401.5831134564644,"p1y":710.2902374670184,"p2x":210.55408970976254,"p2y":540.3693931398417},{"p1x":207.38786279683376,"p1y":527.7044854881267,"p2x":392.0844327176781,"p2y":177.30870712401054}],"scoreBalls":[{"x":430.0791556728232,"y":471.76781002638523},{"x":596.8337730870712,"y":265.9630606860158},{"x":781.5303430079156,"y":466.49076517150394},{"x":726.6490765171504,"y":637.467018469657}],"poisonBalls":[{"x":397.36147757255935,"y":254.35356200527704},{"x":380.4749340369393,"y":308.17941952506595},{"x":356.20052770448547,"y":356.7282321899736},{"x":338.2585751978892,"y":371.50395778364117},{"x":616.88654353562,"y":416.88654353562004},{"x":656.9920844327177,"y":460.15831134564644},{"x":658.0474934036939,"y":531.9261213720316},{"x":623.2189973614776,"y":551.9788918205804},{"x":899.7361477572559,"y":375.72559366754615},{"x":943.0079155672823,"y":448.54881266490764},{"x":934.5646437994723,"y":479.155672823219},{"x":929.287598944591,"y":491.82058047493405}]};
 sites[4]={"width":1100,"height":700,"cats":[{"x":363.4564643799473,"y":475.5936675461741,"arc":2.503631654320283,"arcSpd":1}],"barriers":[{"p1x":335.7519788918206,"p1y":190.23746701846963,"p2x":709.7625329815304,"p2y":192.08443271767808},{"p1x":708.8390501319261,"p1y":191.16094986807386,"p2x":907.3878627968338,"p2y":393.4036939313984},{"p1x":906.4643799472295,"p1y":394.3271767810026,"p2x":753.1662269129288,"p2y":579.9472295514512},{"p1x":752.2427440633246,"p1y":581.7941952506595,"p2x":372.6912928759895,"p2y":576.2532981530343},{"p1x":367.15039577836416,"p1y":572.5593667546174,"p2x":200.00000000000006,"p2y":398.9445910290237},{"p1x":199.07651715039586,"p1y":394.3271767810026,"p2x":342.2163588390502,"p2y":189.3139841688654},{"p1x":361.60949868073885,"p1y":230.87071240105539,"p2x":255.40897097625336,"p2y":383.24538258575194},{"p1x":705.1451187335092,"p1y":229.94722955145116,"p2x":841.820580474934,"p2y":384.16886543535617},{"p1x":402.2427440633246,"p1y":531.9261213720316,"p2x":715.3034300791556,"p2y":548.5488126649076}],"scoreBalls":[{"x":368.9973614775726,"y":289.05013192612137},{"x":544.4591029023748,"y":508.83905013192606},{"x":759.6306068601583,"y":325.065963060686},{"x":574.9340369393141,"y":405.4089709762533}],"poisonBalls":[{"x":451.18733509234835,"y":222.5593667546174},{"x":542.6121372031663,"y":225.32981530343005},{"x":644.1952506596307,"y":229.02374670184693}]};
+sites[5]={"width":1200,"height":800,"cats":[{"x":800,"y":600,"arc":4,"arcSpd":-1}],"barriers":[{"p1x":200,"p1y":100,"p2x":600,"p2y":100},{"p1x":1100,"p1y":750,"p2x":600,"p2y":800},{"p1x":200,"p1y":100,"p2x":200,"p2y":400},{"p1x":200,"p1y":400,"p2x":600,"p2y":500},{"p1x":600,"p1y":800,"p2x":600,"p2y":500},{"p1x":596.8337730870712,"p1y":92.87598944591029,"p2x":946.1741424802111,"p2y":252.24274406332452},{"p1x":946.1741424802111,"p1y":249.07651715039577,"p2x":1093.9313984168866,"p2y":749.3403693931398},{"p1x":612.664907651715,"p1y":583.6411609498681,"p2x":772.0316622691292,"p2y":445.38258575197887}],"scoreBalls":[{"x":850,"y":300},{"x":260.15831134564644,"y":351.45118733509236},{"x":246.43799472295515,"y":265.9630606860158},{"x":951.4511873350923,"y":485.4881266490765}],"poisonBalls":[{"x":650,"y":200},{"x":518.7335092348285,"y":153.03430079155672},{"x":646.4379947229552,"y":449.6042216358839}]};
+sites[6]={"width":1100,"height":700,"cats":[{"x":415.17150395778367,"y":464.51187335092345,"arc":1.6119253831724487,"arcSpd":0},{"x":616.490765171504,"y":511.60949868073874,"arc":1.5282687921751126,"arcSpd":0},{"x":200.00000000000006,"y":459.8944591029023,"arc":-3.0825480639170366,"arcSpd":0},{"x":754.089709762533,"y":272.42744063324534,"arc":0.07019697107186958,"arcSpd":0}],"barriers":[{"p1x":638.6543535620053,"p1y":129.28759894459102,"p2x":875.9894459102902,"p2y":132.9815303430079},{"p1x":875.9894459102902,"p1y":132.9815303430079,"p2x":872.2955145118733,"p2y":616.88654353562},{"p1x":873.2189973614776,"p1y":617.8100263852242,"p2x":236.0158311345647,"p2y":582.7176781002638},{"p1x":187.9947229551452,"p1y":224.40633245382583,"p2x":260.02638522427446,"p2y":337.9947229551451},{"p1x":187.07124010554097,"p1y":231.7941952506596,"p2x":28.23218997361486,"p2y":447.8891820580474},{"p1x":30.079155672823305,"p1y":448.81266490765165,"p2x":169.52506596306077,"p2y":675.9894459102902},{"p1x":168.60158311345654,"p1y":669.5250659630606,"p2x":249.86807387862802,"p2y":581.7941952506595},{"p1x":643.2717678100264,"p1y":128.3641160949868,"p2x":489.97361477572565,"p2y":265.9630606860158},{"p1x":201.8469656992085,"p1y":245.64643799472293,"p2x":494.5910290237467,"p2y":269.6569920844327},{"p1x":487.20316622691297,"p1y":270.5804749340369,"p2x":535.2242744063325,"p2y":331.5303430079155}],"scoreBalls":[{"x":498.28496042216364,"y":526.3852242744063},{"x":680.2110817941953,"y":385.0923482849604},{"x":675.5936675461742,"y":171.7678100263852},{"x":821.5039577836412,"y":205.01319261213717}],"poisonBalls":[{"x":501.97889182058054,"y":467.2823218997361},{"x":743.9313984168865,"y":470.05277044854876},{"x":755.0131926121372,"y":181.92612137203164}]};
 let tk=0;
 
 Button=function(){
@@ -513,8 +515,8 @@ Cat=function(){
 			let dd=Math.sqrt(dx*dx+dy*dy);
 			if(dd<10)dd=10;
 			if(dd<100){
-				if(spd[i].x*dx<0)spd[i].x=0;
-				if(spd[i].y*dy<0)spd[i].y=0;
+				if(spd[i].x*dx<0)spd[i].x*=.4;
+				if(spd[i].y*dy<0)spd[i].y*=.4;
 				spd[i]={x:spd[i].x+dx/dd*64,y:spd[i].y+dy/dd*64};
 			}
 		}
@@ -600,6 +602,10 @@ PlayingPage=function(){
 	let replayButton;
 	let homeButton;
 	let nextButton;
+	let callBackFunc;
+	thisPlayingPage.setCallBack=function(f){
+		callBackFunc=f;
+	}
 	thisPlayingPage.toJSON=function(){
 		let listToJSON=function(list){
 			let ans=[];
@@ -622,6 +628,7 @@ PlayingPage=function(){
 		life=true;
 		page=_page;
 		index=_index;
+		callBackFunc=null;
 		canvas=document.createElement('canvas');
 		canvas.style.position='fixed';
 		canvas.style.left='0px';
@@ -696,17 +703,23 @@ PlayingPage=function(){
 		replayButton=new Button().init(new Point().init(0,150),new Point().init(150,300),imageReplay,autoView,function(){
 			if(!life)return;
 			thisPlayingPage.clear();
-			new PlayingPage().init(page,index);
+			new PlayingPage().init(page,index).setCallBack(callBackFunc);
 		});
 		homeButton=new Button().init(new Point().init(0,0),new Point().init(150,150),imageHome,autoView,function(){
 			if(!life)return;
 			thisPlayingPage.clear();
-			new ChoosingPage().init(page,index);
+			if(callBackFunc!=null){
+				callBackFunc();
+			}else{
+				new ChoosingPage().init(page,index);
+			}
 		});
 		nextButton=new Button().init(new Point().init(width/2-100,height/2-100),new Point().init(width/2+100,height/2+100),imageNext,autoView,function(){
 			if(!life)return;
 			thisPlayingPage.clear();
-			if(index<关卡数){
+			if(callBackFunc!=null){
+				callBackFunc();
+			}else if(index<关卡数){
 				new PlayingPage().init(page,index+1);
 			}else{
 				new ChoosingPage().init(page,index);
@@ -802,6 +815,8 @@ PlayingPage=function(){
 			poisonBalls[i].clear();
 		}
 		replayButton.clear();
+		nextButton.clear();
+		homeButton.clear();
 		life=false;
 	}
 }
@@ -832,6 +847,17 @@ CreatingPage=function(){
 	let barriers;
 	let poisonBalls;
 	let scoreBalls;
+	thisCreatingPage.test=function(result){
+		if(!life)return;
+		page.innerHTML='';
+		life=false;
+		sites[0]=result;
+		new PlayingPage().init(page,0).setCallBack(function(){
+			life=true;
+			page.append(canvas);
+			setTimeout(thisCreatingPage.draw,0);
+		});
+	}
 	thisCreatingPage.toJSON=function(){
 		let listToJSON=function(list){
 			let ans=[];
@@ -863,8 +889,16 @@ CreatingPage=function(){
 		page.append(canvas);
 		canvas.width=window.innerWidth;
 		canvas.height=window.innerHeight;
-		width=sites[index].width;
-		height=sites[index].height;
+		inputSite=prompt('（1）导入要编辑的关卡文件并确定\n（2）如新建空白关卡则点取消\n（3）如编辑当前关卡则直接点确定','当前关卡');
+		if(inputSite==null){
+			inputSite={"width":sites[index].width,"height":sites[index].height,"cats":[],"barriers":[],"scoreBalls":[],"poisonBalls":[]};
+		}else if(inputSite=='当前关卡'){
+			inputSite=sites[index];
+		}else{
+			inputSite=JSON.parse(inputSite);
+		}
+		width=inputSite.width;
+		height=inputSite.height;
 		autoView=new AutoView().init(width,height);
 		imageHome=new Image();
 		imageHome.src=homeImageSrc;
@@ -884,7 +918,8 @@ CreatingPage=function(){
 			if(!life)return;
 			let result=thisCreatingPage.toJSON();
 			console.log(JSON.stringify(result));
-			alert('输出完成\n请前往控制台查看结果');
+			let ans=prompt('输出完成请复制结果\n（1）点击确定试玩\n（2）点取消继续编辑',JSON.stringify(result));
+			if(ans!=null)thisCreatingPage.test(result);
 		});
 		homeButton=new Button().init(new Point().init(0,0),new Point().init(150,150),imageHome,autoView,function(){
 			if(!life)return;
@@ -978,12 +1013,43 @@ CreatingPage=function(){
 		barriers=[];
 		poisonBalls=[];
 		scoreBalls=[];
+		let forEachDo=function(list,f){for(let i=0;i<list.length;i++)f(list[i]);};
+		forEachDo(inputSite.cats,function(catv){
+			cats.push(new Cat().init(catv.x,catv.y,catv.arc,catv.arcSpd,imageCommon,imageBlkmod,imageCirmod,autoView));
+		});
+		forEachDo(inputSite.barriers,function(barv){
+			let p1=new Point().init(barv.p1x,barv.p1y);
+			let p2=new Point().init(barv.p2x,barv.p2y);
+			barriers.push(new Barrier().init(p1,p2,autoView));
+		});
+		forEachDo(inputSite.scoreBalls,function(scrv){
+			let pos=new Point().init(scrv.x,scrv.y);
+			scoreBalls.push(new ScoreBall().init(pos,autoView,imageScoreBall));
+		});
+		forEachDo(inputSite.poisonBalls,function(scrv){
+			let pos=new Point().init(scrv.x,scrv.y);
+			poisonBalls.push(new PoisonBall().init(pos,autoView,imagePoisonBall));
+		});
 		setTimeout(thisCreatingPage.draw,0);
 		return thisCreatingPage;
 	}
 	thisCreatingPage.clear=function(){
 		if(!life)return;
 		page.innerHTML='';
+		for(let i=0;i<cats.length;i++){
+			cats[i].clear();
+		}
+		for(let i=0;i<barriers.length;i++){
+			barriers[i].clear();
+		}
+		for(let i=0;i<scoreBalls.length;i++){
+			scoreBalls[i].clear();
+		}
+		for(let i=0;i<poisonBalls.length;i++){
+			poisonBalls[i].clear();
+		}
+		nextButton.clear();
+		homeButton.clear();
 		life=false;
 	}
 	thisCreatingPage.draw=function(){
@@ -1193,6 +1259,7 @@ ChoosingPage=function(){
 	let homeButton;
 	let funcButton;
 	let lastChgTime;
+	let inputSite;
 	thisChoosingPage.init=function(_page,_index){
 		page=_page;
 		index=_index;
